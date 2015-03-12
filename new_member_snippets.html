@@ -1,0 +1,125 @@
+<p>New members to First Burlington Toastmasters are required to pay:</p>
+<ol>
+<li>Initiation fee of $<span id="InitationFee"></span> to cover manuals sent directly by Toastmasters International to your home.</li>
+<li>Pro-rated member dues of $<span id="proratedDues"></span> covering <span id="proratedStart1"></span> to June 30, <span id="endYear"></span>.</li>
+</ol>
+<p>The total fee of $<span id="totalNewMemberDues"></span> can be paid:</p>
+<ul>
+	<li>
+		In cash at our weekly meeting</li>
+	<li>
+		By cheque payable to First Burlington Toastmasters</li>
+	<li>
+                Using Interac e-Transfer from online banking to treasurer@firstburlingtontoastmasters.org</li>
+ 
+</ul>
+<p>
+For your convenience and at additional cost, the initiation fee of $<span id="PayPalInitiation"></span> and pro-rated member dues of $<span id="PayPalProratedDues"></span> totaling $<span id="PayPalTotalFees"></span> can be made online using the following methods by using the Pay Now button seen below.</p>
+<ul>
+	<li>
+		Credit Card</li>
+	<li>
+		Direct Debit from Bank Account through PayPal</li>
+	<li>
+		PayPal Balance</li>
+</ul>
+
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_xclick">
+<input type="hidden" name="business" value="MPQPXX8YJGN9Q">
+<input type="hidden" name="lc" value="CA">
+<input type="hidden" name="item_name" value="">
+<input type="hidden" name="amount" value="0.00">
+<input type="hidden" name="currency_code" value="CAD">
+<input type="hidden" name="button_subtype" value="services">
+<input type="hidden" name="no_note" value="0">
+<input type="hidden" name="cn" value="Add special instructions to the seller:">
+<input type="hidden" name="no_shipping" value="2">
+<input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynow_LG.gif:NonHosted">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+<script>
+
+//
+// Operational Variables
+//
+
+// Paypal Fee Structure
+//
+paypaldiscount = .029;
+paypaltransfee = .30;
+
+
+// First Burlington Toastmaster Fee Structure
+//
+initiationfee = 50;
+fees = [ 238, 226, 214, 202, 190, 176, 166, 154, 142, 130, 118, 106, 94, 82, 70, 58, 46, 34, 22, 10 ];
+months = [ "September", "October", "November", "December", "January", "February", "March", "April", "May", "June" ];
+
+
+// End Year
+myDate = new Date();  // 0 = January; 11 = December	
+monthNo = myDate.getMonth();  // 0 = January; 11 = December
+
+//
+// Handle Summer Break  Start in September = 8;
+//
+if (monthNo == 6 || monthNo == 7)
+{
+	monthNo = 8;
+	firstHalf = true;
+}
+else
+{
+	firstHalf = myDate.getDate()<16;
+}
+
+//
+// If before July, session ends same year.  If equal to or greater than June, it ends the year after.
+//
+if (monthNo < 6)
+{
+       monthNo+=4;
+       endYear=myDate.getFullYear();
+}
+else
+{
+       monthNo-=8;
+       endYear=myDate.getFullYear()+1;
+}
+
+//
+// Fill in the blanks in the narrative above
+//
+document.getElementById("InitationFee").innerHTML = initiationfee.toFixed(2);
+document.getElementById("proratedStart1").innerHTML = months[monthNo]+" "+(firstHalf?1:16)+", "+myDate.getFullYear();
+document.getElementById("proratedDues").innerHTML = fees[monthNo*2+(firstHalf?0:1)].toFixed(2);
+document.getElementById("totalNewMemberDues").innerHTML = (fees[monthNo*2+(firstHalf?0:1)]+initiationfee).toFixed(2);
+document.getElementById("endYear").innerHTML = endYear;
+
+//
+// Fill in the blanks in the narrative above for the Paypal side
+//
+document.getElementById("PayPalInitiation").innerHTML = paypalize_addonfee(initiationfee).toFixed(2);
+document.getElementById("PayPalProratedDues").innerHTML = paypalize_fee(fees[monthNo*2+(firstHalf?0:1)]).toFixed(2);
+document.getElementById("PayPalTotalFees").innerHTML = (paypalize_addonfee(initiationfee)+paypalize_fee(fees[monthNo*2+(firstHalf?0:1)])).toFixed(2);
+
+//
+// Setup Paypal button with proper price and description.
+//
+document.forms[0].item_name.value="Initiation Fee & Dues from "+months[monthNo]+" "+(firstHalf?1:16)+", "+myDate.getFullYear()+" to June 30, "+endYear+".";
+document.forms[0].amount.value=(paypalize_addonfee(initiationfee)+paypalize_fee(fees[monthNo*2+(firstHalf?0:1)])).toFixed(2);
+
+//
+// These functions are rounded up to the nearest 10 cents. 
+//
+function paypalize_addonfee(value)
+{
+	return Math.ceil(value/(1-paypaldiscount)*10)/10;
+}
+function paypalize_fee(value)
+{
+	return Math.ceil((value+paypaltransfee)/(1-paypaldiscount)*10)/10;
+}
+</script>
